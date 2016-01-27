@@ -28,11 +28,20 @@ You can choose your desired icon and color for each theme.
 
 You should initialize cards list from this URL: [http://static.pushe.co/challenge/json](http://static.pushe.co/challenge/json)
 
+## Expectations
+
+We want a clean, readable and maintainable code with meaningful comments and java docs.
+
 ## Estimation
 
 After reading and understanding the challenge and all of expectations, estimate the challenge 
 development cost, send us your time cost estimation and your reasoning on how you've estimated 
 this. **Do not start development before getting a confirmation from us**.
+
+## Tests
+
+- Write unit tests for your code with the testing framework of your choice
+- Write instrument tests for your app
 
 ## Task
 
@@ -40,13 +49,3 @@ this. **Do not start development before getting a confirmation from us**.
 2. Develop the given challenge using Android Studio
 3. Commit and Push your code to your new repository
 3. Send us a pull request, we will review your code and get back to you
-
-## Tests
-
-- Write unit tests for your code with the testing framework of your choice
-- Write instrument tests for your app
-
-
-## Once Complete
-1. Commit and Push your code to your new repository
-2. Send us a pull request, we will review your code and get back to you
