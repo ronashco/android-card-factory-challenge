@@ -98,9 +98,6 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     public void imageDownloadComplete(BitmapAndURLWrap imageWithURL) {
         this.cardIndex = 1;
         showCard(cards.get(0));
-//        if (progressDialog != null) {
-//            progressDialog.hide();
-//        }
 
         for (int i : imageDownloadList) {
             PictureCard pictureCard = (PictureCard) cards.get(i);
@@ -137,11 +134,6 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
         showCard(this.cards.get(cardIndex - 1));
 
-//        Intent intent = new Intent(this, DisplayMessageActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.editText);
-//        String message = editText.getText().toString();
-//        intent.putExtra(EXTRA_MESSAGE, message);
-//        startActivity(intent);
     }
 
     private void showCard(Card card) {
@@ -232,80 +224,3 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 }
-
-//abstract class Card {
-//    Code code;
-//    Tag tag;
-//    String title;
-//    String description;
-//
-//    public Card() {
-//        this.code = null;
-//        this.tag = null;
-//        this.title = null;
-//        this.description = null;
-//    }
-//
-//    public Card(Code code, Tag tag, String title, String description) {
-//        this.code = code;
-//        this.tag = tag;
-//        this.title = title;
-//        this.description = description;
-//    }
-//
-//    public abstract boolean action();
-//}
-
-//class PictureCard extends Card {
-//    String imageURL;
-//
-//    public PictureCard(Code code, Tag tag, String title, String description,String imageURL) {
-//        super(code,tag,title,description);
-//        this.imageURL = imageURL;
-//    }
-//
-//    @Override
-//    public boolean action() {
-//        // TODO
-//        return true;
-//    }
-//}
-//
-//class VibratorCard extends Card {
-//    public VibratorCard(Code code, Tag tag, String title, String description) {
-//        super(code, tag, title, description);
-//    }
-//
-//    @Override
-//    public boolean action() {
-//        // TODO
-//        return true;
-//    }
-//}
-//
-//class SoundCard extends Card {
-//    String soundURL;
-//
-//    public SoundCard(Code code, Tag tag, String title, String description, String soundURL) {
-//        super(code, tag, title, description);
-//        this.soundURL = soundURL;
-//    }
-//
-//    @Override
-//    public boolean action() {
-//        // TODO
-//        return true;
-//    }
-//}
-//
-//enum Code {
-//    PICTURE_CARD,   // 0
-//    VIBRATOR_CARD,  // 1
-//    SOUND_CARD      // 2
-//}
-//
-//enum Tag {
-//    SPORT,  // sport
-//    ART,    // art
-//    FUN     // fun
-//}

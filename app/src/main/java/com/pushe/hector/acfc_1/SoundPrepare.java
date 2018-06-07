@@ -15,7 +15,6 @@ public class SoundPrepare extends AsyncTask<String, Void, MediaPlayer>{
 
     @Override
     protected MediaPlayer doInBackground(String... strings) {
-//        String url = "http://........"; // your URL here
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
@@ -29,8 +28,6 @@ public class SoundPrepare extends AsyncTask<String, Void, MediaPlayer>{
 
     @Override
     protected void onPostExecute(MediaPlayer mediaPlayer) {
-//        super.onPostExecute(result);
-
         downloadCompleteListener.soundPrepareComplete(mediaPlayer);
     }
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Utility {
     public ArrayList<Card> getCardsFromJSONString(String jsonString) {
-//        Log.d("JSON:", jsonString);
         ArrayList<String> items = seperateItemsInJSON(jsonString);
         ArrayList<Card> cards = new ArrayList<Card>();
         for (String item : items) {
@@ -33,7 +32,6 @@ public class Utility {
     }
 
     private Card stringItemToCard(String item) {
-//        Log.d("card item", item);
         Code code = Code.UNDEFINED;
         Tag tag = Tag.UNDEFINED;
         String title = null;
@@ -113,12 +111,3 @@ public class Utility {
 
     }
 }
-
-//enum Key {
-//    code,
-//    title,
-//    description,
-//    tag,
-//    image,
-//    sound
-//}

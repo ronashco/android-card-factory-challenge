@@ -28,8 +28,6 @@ public class DownloadImage extends AsyncTask<String, Void, BitmapAndURLWrap> {
 
     @Override
     protected void onPostExecute(BitmapAndURLWrap imageWithURL) {
-//        super.onPostExecute(result);
-
         downloadCompleteListener.imageDownloadComplete(imageWithURL);
     }
 }

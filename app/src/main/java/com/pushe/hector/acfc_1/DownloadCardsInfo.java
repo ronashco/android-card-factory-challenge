@@ -31,8 +31,6 @@ public class DownloadCardsInfo extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-//        super.onPostExecute(result);
-
         jsonDCL.jsonDownloadComplete(new Utility().getCardsFromJSONString(result));
     }
 

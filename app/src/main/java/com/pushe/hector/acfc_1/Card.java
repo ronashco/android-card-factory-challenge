@@ -16,13 +16,6 @@ public abstract class Card {
     String title;
     String description;
 
-//    public Card() {
-//        this.code = null;
-//        this.tag = null;
-//        this.title = null;
-//        this.description = null;
-//    }
-
     public Card(Code code, Tag tag, String title, String description) {
         this.code = code;
         this.tag = tag;
@@ -30,7 +23,6 @@ public abstract class Card {
         this.description = description;
     }
 
-    public abstract boolean action();
 }
 
 class PictureCard extends Card {
@@ -44,23 +36,11 @@ class PictureCard extends Card {
         this.imageDownloaded = false;
         this.imageBitmap = null;
     }
-
-    @Override
-    public boolean action() {
-        // TODO
-        return true;
-    }
 }
 
 class VibratorCard extends Card {
     public VibratorCard(Code code, Tag tag, String title, String description) {
         super(code, tag, title, description);
-    }
-
-    @Override
-    public boolean action() {
-        // TODO
-        return true;
     }
 }
 
@@ -70,12 +50,6 @@ class SoundCard extends Card {
     public SoundCard(Code code, Tag tag, String title, String description, String soundURL) {
         super(code, tag, title, description);
         this.soundURL = soundURL;
-    }
-
-    @Override
-    public boolean action() {
-        // TODO
-        return true;
     }
 }
 
