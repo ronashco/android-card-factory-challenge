@@ -1,6 +1,7 @@
 package com.pushe.hector.acfc_1;
 
 import android.annotation.TargetApi;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -9,12 +10,11 @@ import android.support.annotation.RequiresApi;
  * Card class for abstracting cards
  * Card class has 3 subclassed: PictureCard, VibratorCard, SoundCard
  */
-public abstract class Card implements Comparable<Card> {
+public abstract class Card {
     Code code;
     Tag tag;
     String title;
     String description;
-    int priority;
 
 //    public Card() {
 //        this.code = null;
@@ -28,25 +28,21 @@ public abstract class Card implements Comparable<Card> {
         this.tag = tag;
         this.title = title;
         this.description = description;
-        this.priority = -1;
     }
 
     public abstract boolean action();
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public int compareTo(@NonNull Card card) {
-        return Integer.compare(this.priority, card.priority);
-    }
 }
 
 class PictureCard extends Card {
     String imageURL;
+    boolean imageDownloaded;
+    Bitmap imageBitmap;
 
     public PictureCard(Code code, Tag tag, String title, String description,String imageURL) {
         super(code,tag,title,description);
         this.imageURL = imageURL;
+        this.imageDownloaded = false;
+        this.imageBitmap = null;
     }
 
     @Override

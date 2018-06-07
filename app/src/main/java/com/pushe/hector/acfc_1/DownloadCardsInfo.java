@@ -13,9 +13,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class DownloadCardsInfo extends AsyncTask<String, Void, String> {
-    JSONDownloadCompleteListener jsonDCL;
+    DownloadCompleteListener jsonDCL;
 
-    public DownloadCardsInfo(JSONDownloadCompleteListener jsonDCL) {
+    public DownloadCardsInfo(DownloadCompleteListener jsonDCL) {
         this.jsonDCL = jsonDCL;
     }
 

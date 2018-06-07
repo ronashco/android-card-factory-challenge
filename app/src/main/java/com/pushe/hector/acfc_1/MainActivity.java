@@ -3,23 +3,27 @@ package com.pushe.hector.acfc_1;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity implements JSONDownloadCompleteListener {
+public class MainActivity extends AppCompatActivity implements DownloadCompleteListener {
 //    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     public static final String CARDS_JSON_URL = "http://static.pushe.co/challenge/json";
     ProgressDialog progressDialog;
     private int cardIndex;
     private ArrayList<Card> cards;
+    private ArrayList<Integer> imageDownloadList = new ArrayList<Integer>();
+    private ArrayList<Integer> soundDownloadList = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +78,36 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
     public void jsonDownloadComplete(ArrayList<Card> cards) {
         this.cards = cards;
         Collections.shuffle(this.cards);
+
+        for (int i = 0; i < cards.size(); i++) {
+            Card card = this.cards.get(i);
+
+            if (card instanceof PictureCard) {
+                this.imageDownloadList.add(new Integer(i));
+                new DownloadImage(this).execute(((PictureCard) card).imageURL);
+            } else if (card instanceof SoundCard) {
+                // TODO
+            }
+        }
+
         this.cardIndex = 1;
         showCard(cards.get(0));
         if (progressDialog != null) {
             progressDialog.hide();
+        }
+
+
+    }
+
+    @Override
+    public void imageDownloadComplete(BitmapAndURLWrap imageWithURL) {
+        for (int i : imageDownloadList) {
+            PictureCard pictureCard = (PictureCard) cards.get(i);
+            if (pictureCard.imageURL.equals(imageWithURL.imageURL)) {
+                pictureCard.imageBitmap = imageWithURL.imageBitmap;
+                imageDownloadList.remove(new Integer(i));
+                break;
+            }
         }
     }
 
@@ -99,8 +129,6 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
     }
 
     private void showCard(Card card) {
-        setContentView(R.layout.activity_main_picture_card);
-
         if (card instanceof PictureCard) {
             showPictureCard(card);
         } else if (card instanceof VibratorCard) {
@@ -111,30 +139,38 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
     }
 
     public void showPictureCard(Card card) {
+        setContentView(R.layout.activity_main_picture_card);
         PictureCard picCard = (PictureCard) card;
+
+//        TextView textView1 = findViewById(R.id.textView1_pic_card);
+//        textView1.setText("picture card");
+
         TextView textView1 = findViewById(R.id.textView1_pic_card);
-        textView1.setText("picture card");
+        textView1.setText(picCard.title);
 
         TextView textView2 = findViewById(R.id.textView2_pic_card);
-        textView2.setText(picCard.title);
+        textView2.setText(picCard.description);
 
-        TextView textView3 = findViewById(R.id.textView3_pic_card);
-        textView3.setText(picCard.description);
+//        TextView textView4 = findViewById(R.id.textView4_pic_card);
+//        textView4.setText(picCard.imageURL);
 
-        TextView textView4 = findViewById(R.id.textView4_pic_card);
-        textView4.setText(picCard.imageURL);
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setImageBitmap(((PictureCard) card).imageBitmap);
 
-        TextView textView5 = findViewById(R.id.textView5_pic_card);
-        if (picCard.tag == Tag.FUN) {
-            textView5.setText("Fun");
-        } else if (picCard.tag == Tag.ART) {
-            textView5.setText("Art");
-        } else if (picCard.tag == Tag.SPORT) {
-            textView5.setText("Sport");
-        }
+//        TextView textView5 = findViewById(R.id.textView5_pic_card);
+//        if (picCard.tag == Tag.FUN) {
+//            textView5.setText("Fun");
+//        } else if (picCard.tag == Tag.ART) {
+//            textView5.setText("Art");
+//        } else if (picCard.tag == Tag.SPORT) {
+//            textView5.setText("Sport");
+//        }
     }
 
     public void showVibratorCard(Card card) {
+//        setContentView(R.layout.activity_main_vibrator_card);
+        setContentView(R.layout.activity_main_picture_card);
+
         VibratorCard vibCard = (VibratorCard) card;
         TextView textView1 = findViewById(R.id.textView1_pic_card);
         textView1.setText("vibrator card");
@@ -142,23 +178,26 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
         TextView textView2 = findViewById(R.id.textView2_pic_card);
         textView2.setText(vibCard.title);
 
-        TextView textView3 = findViewById(R.id.textView3_pic_card);
-        textView3.setText(vibCard.description);
+//        TextView textView3 = findViewById(R.id.textView3_pic_card);
+//        textView3.setText(vibCard.description);
 
-        TextView textView4 = findViewById(R.id.textView4_pic_card);
-        textView4.setText("no image exists");
+//        TextView textView4 = findViewById(R.id.textView4_pic_card);
+//        textView4.setText("no image exists");
 
-        TextView textView5 = findViewById(R.id.textView5_pic_card);
-        if (vibCard.tag == Tag.FUN) {
-            textView5.setText("Fun");
-        } else if (vibCard.tag == Tag.ART) {
-            textView5.setText("Art");
-        } else if (vibCard.tag == Tag.SPORT) {
-            textView5.setText("Sport");
-        }
+//        TextView textView5 = findViewById(R.id.textView5_pic_card);
+//        if (vibCard.tag == Tag.FUN) {
+//            textView5.setText("Fun");
+//        } else if (vibCard.tag == Tag.ART) {
+//            textView5.setText("Art");
+//        } else if (vibCard.tag == Tag.SPORT) {
+//            textView5.setText("Sport");
+//        }
     }
 
     public void showSoundCard(Card card) {
+//        setContentView(R.layout.activity_main_sound_card);
+        setContentView(R.layout.activity_main_picture_card);
+
         SoundCard soundCard = (SoundCard) card;
         TextView textView1 = findViewById(R.id.textView1_pic_card);
         textView1.setText("sound card");
@@ -166,20 +205,20 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
         TextView textView2 = findViewById(R.id.textView2_pic_card);
         textView2.setText(soundCard.title);
 
-        TextView textView3 = findViewById(R.id.textView3_pic_card);
-        textView3.setText(soundCard.description);
+//        TextView textView3 = findViewById(R.id.textView3_pic_card);
+//        textView3.setText(soundCard.description);
 
-        TextView textView4 = findViewById(R.id.textView4_pic_card);
-        textView4.setText(soundCard.soundURL);
+//        TextView textView4 = findViewById(R.id.textView4_pic_card);
+//        textView4.setText(soundCard.soundURL);
 
-        TextView textView5 = findViewById(R.id.textView5_pic_card);
-        if (soundCard.tag == Tag.FUN) {
-            textView5.setText("Fun");
-        } else if (soundCard.tag == Tag.ART) {
-            textView5.setText("Art");
-        } else if (soundCard.tag == Tag.SPORT) {
-            textView5.setText("Sport");
-        }
+//        TextView textView5 = findViewById(R.id.textView5_pic_card);
+//        if (soundCard.tag == Tag.FUN) {
+//            textView5.setText("Fun");
+//        } else if (soundCard.tag == Tag.ART) {
+//            textView5.setText("Art");
+//        } else if (soundCard.tag == Tag.SPORT) {
+//            textView5.setText("Sport");
+//        }
     }
 }
 
