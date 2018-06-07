@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements DownloadCompleteListener {
-//    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     public static final String CARDS_JSON_URL = "http://static.pushe.co/challenge/json";
     ProgressDialog progressDialog;
     private int cardIndex;
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     }
 
     private void downloadCardsInfoAsJSON() {
-//        new DownloadRepoTask(this).execute("https://api.github.com/repositories");
         new DownloadCardsInfo(this).execute(CARDS_JSON_URL);
     }
 
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
             this.mediaPlayer.stop();
             this.mediaPlayer = null;
         }
-        
+
         if (this.cardIndex >= this.cards.size()) {
             Collections.shuffle(this.cards);
             this.cardIndex = 1;
@@ -181,30 +182,32 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     }
 
     public void showVibratorCard(Card card) {
-//        setContentView(R.layout.activity_main_vibrator_card);
-        setContentView(R.layout.activity_main_picture_card);
+        setContentView(R.layout.activity_main_vibrator_card);
 
         VibratorCard vibCard = (VibratorCard) card;
-        TextView textView1 = findViewById(R.id.textView1_pic_card);
-        textView1.setText("vibrator card");
+        TextView textView1 = findViewById(R.id.textView1_vib_card);
+        textView1.setText(vibCard.title);
 
-        TextView textView2 = findViewById(R.id.textView2_pic_card);
-        textView2.setText(vibCard.title);
+        TextView textView2 = findViewById(R.id.textView2_vib_card);
+        textView2.setText(vibCard.description);
 
-//        TextView textView3 = findViewById(R.id.textView3_pic_card);
-//        textView3.setText(vibCard.description);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
+        }else{
+            //deprecated in API 26
+            v.vibrate(500);
+        }
 
-//        TextView textView4 = findViewById(R.id.textView4_pic_card);
-//        textView4.setText("no image exists");
-
-//        TextView textView5 = findViewById(R.id.textView5_pic_card);
-//        if (vibCard.tag == Tag.FUN) {
-//            textView5.setText("Fun");
-//        } else if (vibCard.tag == Tag.ART) {
-//            textView5.setText("Art");
-//        } else if (vibCard.tag == Tag.SPORT) {
-//            textView5.setText("Sport");
-//        }
+        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
+        if (vibCard.tag == Tag.FUN) {
+            imageView2.setImageResource(R.drawable.fun);
+        } else if (vibCard.tag == Tag.ART) {
+            imageView2.setImageResource(R.drawable.art);
+        } else if (vibCard.tag == Tag.SPORT) {
+            imageView2.setImageResource(R.drawable.sport);
+        }
     }
 
     public void showSoundCard(Card card) {
