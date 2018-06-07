@@ -33,6 +33,7 @@ public class Utility {
     }
 
     private Card stringItemToCard(String item) {
+//        Log.d("card item", item);
         Code code = Code.UNDEFINED;
         Tag tag = Tag.UNDEFINED;
         String title = null;
@@ -93,6 +94,8 @@ public class Utility {
                                 }
                             }
                         }
+
+                        break;
                     }
                 }
             }

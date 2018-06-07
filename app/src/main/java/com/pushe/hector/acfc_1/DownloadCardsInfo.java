@@ -33,7 +33,7 @@ public class DownloadCardsInfo extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 //        super.onPostExecute(result);
 
-        jsonDCL.jsonDownloadComplete( new Utility().getCardsFromJSONString(result));
+        jsonDCL.jsonDownloadComplete(new Utility().getCardsFromJSONString(result));
     }
 
     // Creates and opens a connection to the resource referred to by the URL.

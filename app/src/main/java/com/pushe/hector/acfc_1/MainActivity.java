@@ -3,21 +3,23 @@ package com.pushe.hector.acfc_1;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements JSONDownloadCompleteListener {
 //    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
     public static final String CARDS_JSON_URL = "http://static.pushe.co/challenge/json";
     ProgressDialog progressDialog;
+    private int cardIndex;
+    private ArrayList<Card> cards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            startDownload();
+            downloadCardsInfoAsJSON();
         } else {
             new AlertDialog.Builder(this)
                     .setTitle("No Internet Connection")
@@ -63,24 +65,122 @@ public class MainActivity extends AppCompatActivity implements JSONDownloadCompl
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    private void startDownload() {
+    private void downloadCardsInfoAsJSON() {
 //        new DownloadRepoTask(this).execute("https://api.github.com/repositories");
         new DownloadCardsInfo(this).execute(CARDS_JSON_URL);
     }
 
     @Override
     public void jsonDownloadComplete(ArrayList<Card> cards) {
-
+        this.cards = cards;
+        Collections.shuffle(this.cards);
+        this.cardIndex = 1;
+        showCard(cards.get(0));
+        if (progressDialog != null) {
+            progressDialog.hide();
+        }
     }
 
-    /** Called when the user taps the Send button */
-//    public void sendMessage(View view) {
+    /** Called when the user taps the Try button */
+    public void tryAnotherCard(View view) {
+        if (this.cardIndex >= this.cards.size()) {
+            Collections.shuffle(this.cards);
+            this.cardIndex = 1;
+        } else {
+            this.cardIndex ++;
+        }
+        showCard(this.cards.get(cardIndex - 1));
+
 //        Intent intent = new Intent(this, DisplayMessageActivity.class);
 //        EditText editText = (EditText) findViewById(R.id.editText);
 //        String message = editText.getText().toString();
 //        intent.putExtra(EXTRA_MESSAGE, message);
 //        startActivity(intent);
-//    }
+    }
+
+    private void showCard(Card card) {
+        setContentView(R.layout.activity_main_picture_card);
+
+        if (card instanceof PictureCard) {
+            showPictureCard(card);
+        } else if (card instanceof VibratorCard) {
+            showVibratorCard(card);
+        } else if (card instanceof SoundCard) {
+            showSoundCard(card);
+        }
+    }
+
+    public void showPictureCard(Card card) {
+        PictureCard picCard = (PictureCard) card;
+        TextView textView1 = findViewById(R.id.textView1_pic_card);
+        textView1.setText("picture card");
+
+        TextView textView2 = findViewById(R.id.textView2_pic_card);
+        textView2.setText(picCard.title);
+
+        TextView textView3 = findViewById(R.id.textView3_pic_card);
+        textView3.setText(picCard.description);
+
+        TextView textView4 = findViewById(R.id.textView4_pic_card);
+        textView4.setText(picCard.imageURL);
+
+        TextView textView5 = findViewById(R.id.textView5_pic_card);
+        if (picCard.tag == Tag.FUN) {
+            textView5.setText("Fun");
+        } else if (picCard.tag == Tag.ART) {
+            textView5.setText("Art");
+        } else if (picCard.tag == Tag.SPORT) {
+            textView5.setText("Sport");
+        }
+    }
+
+    public void showVibratorCard(Card card) {
+        VibratorCard vibCard = (VibratorCard) card;
+        TextView textView1 = findViewById(R.id.textView1_pic_card);
+        textView1.setText("vibrator card");
+
+        TextView textView2 = findViewById(R.id.textView2_pic_card);
+        textView2.setText(vibCard.title);
+
+        TextView textView3 = findViewById(R.id.textView3_pic_card);
+        textView3.setText(vibCard.description);
+
+        TextView textView4 = findViewById(R.id.textView4_pic_card);
+        textView4.setText("no image exists");
+
+        TextView textView5 = findViewById(R.id.textView5_pic_card);
+        if (vibCard.tag == Tag.FUN) {
+            textView5.setText("Fun");
+        } else if (vibCard.tag == Tag.ART) {
+            textView5.setText("Art");
+        } else if (vibCard.tag == Tag.SPORT) {
+            textView5.setText("Sport");
+        }
+    }
+
+    public void showSoundCard(Card card) {
+        SoundCard soundCard = (SoundCard) card;
+        TextView textView1 = findViewById(R.id.textView1_pic_card);
+        textView1.setText("sound card");
+
+        TextView textView2 = findViewById(R.id.textView2_pic_card);
+        textView2.setText(soundCard.title);
+
+        TextView textView3 = findViewById(R.id.textView3_pic_card);
+        textView3.setText(soundCard.description);
+
+        TextView textView4 = findViewById(R.id.textView4_pic_card);
+        textView4.setText(soundCard.soundURL);
+
+        TextView textView5 = findViewById(R.id.textView5_pic_card);
+        if (soundCard.tag == Tag.FUN) {
+            textView5.setText("Fun");
+        } else if (soundCard.tag == Tag.ART) {
+            textView5.setText("Art");
+        } else if (soundCard.tag == Tag.SPORT) {
+            textView5.setText("Sport");
+        }
+    }
 }
 
 //abstract class Card {
