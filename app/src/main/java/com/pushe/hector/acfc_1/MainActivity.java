@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.ContactsContract;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     private ArrayList<Card> cards;
     private ArrayList<Integer> imageDownloadList = new ArrayList<Integer>();
     private ArrayList<Integer> soundDownloadList = new ArrayList<Integer>();
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,28 +89,18 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
             if (card instanceof PictureCard) {
                 this.imageDownloadList.add(new Integer(i));
                 new DownloadImage(this).execute(((PictureCard) card).imageURL);
-            } else if (card instanceof SoundCard) {
-                // TODO
             }
         }
-
-//        this.cardIndex = 1;
-//        showCard(cards.get(0));
-//        if (progressDialog != null) {
-//            progressDialog.hide();
-//        }
-
-
     }
 
     @Override
     public void imageDownloadComplete(BitmapAndURLWrap imageWithURL) {
         this.cardIndex = 1;
         showCard(cards.get(0));
-        if (progressDialog != null) {
-            progressDialog.hide();
-        }
-        
+//        if (progressDialog != null) {
+//            progressDialog.hide();
+//        }
+
         for (int i : imageDownloadList) {
             PictureCard pictureCard = (PictureCard) cards.get(i);
             if (pictureCard.imageURL.equals(imageWithURL.imageURL)) {
@@ -119,8 +111,23 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 
+    @Override
+    public void soundPrepareComplete(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
+        this.mediaPlayer.start();
+    }
+
     /** Called when the user taps the Try button */
     public void tryAnotherCard(View view) {
+        if (progressDialog != null) {
+            progressDialog.show();
+        }
+
+        if (this.mediaPlayer != null) {
+            this.mediaPlayer.stop();
+            this.mediaPlayer = null;
+        }
+        
         if (this.cardIndex >= this.cards.size()) {
             Collections.shuffle(this.cards);
             this.cardIndex = 1;
@@ -137,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     }
 
     private void showCard(Card card) {
+        if (progressDialog != null) {
+            progressDialog.hide();
+        }
+
         if (card instanceof PictureCard) {
             showPictureCard(card);
         } else if (card instanceof VibratorCard) {
@@ -197,30 +208,25 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     }
 
     public void showSoundCard(Card card) {
-//        setContentView(R.layout.activity_main_sound_card);
-        setContentView(R.layout.activity_main_picture_card);
-
         SoundCard soundCard = (SoundCard) card;
-        TextView textView1 = findViewById(R.id.textView1_pic_card);
-        textView1.setText("sound card");
+        new SoundPrepare(this).execute(soundCard.soundURL);
 
-        TextView textView2 = findViewById(R.id.textView2_pic_card);
-        textView2.setText(soundCard.title);
+        setContentView(R.layout.activity_main_sound_card);
 
-//        TextView textView3 = findViewById(R.id.textView3_pic_card);
-//        textView3.setText(soundCard.description);
+        TextView textView1 = findViewById(R.id.textView1_sound_card);
+        textView1.setText(soundCard.title);
 
-//        TextView textView4 = findViewById(R.id.textView4_pic_card);
-//        textView4.setText(soundCard.soundURL);
+        TextView textView2 = findViewById(R.id.textView2_sound_card);
+        textView2.setText(soundCard.description);
 
-//        TextView textView5 = findViewById(R.id.textView5_pic_card);
-//        if (soundCard.tag == Tag.FUN) {
-//            textView5.setText("Fun");
-//        } else if (soundCard.tag == Tag.ART) {
-//            textView5.setText("Art");
-//        } else if (soundCard.tag == Tag.SPORT) {
-//            textView5.setText("Sport");
-//        }
+        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
+        if (soundCard.tag == Tag.FUN) {
+            imageView2.setImageResource(R.drawable.fun);
+        } else if (soundCard.tag == Tag.ART) {
+            imageView2.setImageResource(R.drawable.art);
+        } else if (soundCard.tag == Tag.SPORT) {
+            imageView2.setImageResource(R.drawable.sport);
+        }
     }
 }
 
