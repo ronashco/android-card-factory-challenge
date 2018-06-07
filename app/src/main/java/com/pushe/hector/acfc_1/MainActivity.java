@@ -1,11 +1,13 @@
 package com.pushe.hector.acfc_1;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,17 +92,23 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
             }
         }
 
-        this.cardIndex = 1;
-        showCard(cards.get(0));
-        if (progressDialog != null) {
-            progressDialog.hide();
-        }
+//        this.cardIndex = 1;
+//        showCard(cards.get(0));
+//        if (progressDialog != null) {
+//            progressDialog.hide();
+//        }
 
 
     }
 
     @Override
     public void imageDownloadComplete(BitmapAndURLWrap imageWithURL) {
+        this.cardIndex = 1;
+        showCard(cards.get(0));
+        if (progressDialog != null) {
+            progressDialog.hide();
+        }
+        
         for (int i : imageDownloadList) {
             PictureCard pictureCard = (PictureCard) cards.get(i);
             if (pictureCard.imageURL.equals(imageWithURL.imageURL)) {
@@ -142,29 +150,23 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         setContentView(R.layout.activity_main_picture_card);
         PictureCard picCard = (PictureCard) card;
 
-//        TextView textView1 = findViewById(R.id.textView1_pic_card);
-//        textView1.setText("picture card");
-
         TextView textView1 = findViewById(R.id.textView1_pic_card);
         textView1.setText(picCard.title);
 
         TextView textView2 = findViewById(R.id.textView2_pic_card);
         textView2.setText(picCard.description);
 
-//        TextView textView4 = findViewById(R.id.textView4_pic_card);
-//        textView4.setText(picCard.imageURL);
+        ImageView imageView1 = (ImageView) findViewById(R.id.imageView1);
+        imageView1.setImageBitmap(((PictureCard) card).imageBitmap);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageBitmap(((PictureCard) card).imageBitmap);
-
-//        TextView textView5 = findViewById(R.id.textView5_pic_card);
-//        if (picCard.tag == Tag.FUN) {
-//            textView5.setText("Fun");
-//        } else if (picCard.tag == Tag.ART) {
-//            textView5.setText("Art");
-//        } else if (picCard.tag == Tag.SPORT) {
-//            textView5.setText("Sport");
-//        }
+        ImageView imageView2 = (ImageView) findViewById(R.id.imageView2);
+        if (picCard.tag == Tag.FUN) {
+            imageView2.setImageResource(R.drawable.fun);
+        } else if (picCard.tag == Tag.ART) {
+            imageView2.setImageResource(R.drawable.art);
+        } else if (picCard.tag == Tag.SPORT) {
+            imageView2.setImageResource(R.drawable.sport);
+        }
     }
 
     public void showVibratorCard(Card card) {
