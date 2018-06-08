@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
     private int cardIndex;
     private ArrayList<Card> cards;
     private ArrayList<Integer> imageDownloadList = new ArrayList<Integer>();
-    private ArrayList<Integer> soundDownloadList = new ArrayList<Integer>();
     private MediaPlayer mediaPlayer;
 
     @Override
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
 
     /**
      * Checks that the device has an active internet connection or not
-     * @return
+     * @return true if the device has an active internet connection
      */
     private boolean isNetworkConnected() {
         // Retrieves an instance of the ConnectivityManager class
@@ -75,10 +74,18 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         return networkInfo != null && networkInfo.isConnected();
     }
 
+    /**
+     * Creating a new AsyncTask for downloding cards information
+     * as json
+     */
     private void downloadCardsInfoAsJSON() {
         new DownloadCardsInfo(this).execute(CARDS_JSON_URL);
     }
 
+    /**
+     * @param cards cards objects generated from information of cards in json file
+     * @see DownloadCompleteListener
+     */
     @Override
     public void jsonDownloadComplete(ArrayList<Card> cards) {
         this.cards = cards;
@@ -94,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 
+    /**
+     * @param imageWithURL Wrapping of Bitmap image and it's URL
+     * @see DownloadCompleteListener
+     */
     @Override
     public void imageDownloadComplete(BitmapAndURLWrap imageWithURL) {
         this.cardIndex = 1;
@@ -109,13 +120,20 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 
+    /**
+     * @param mediaPlayer MediaPlayer object prepared for playing sound
+     * @see DownloadCompleteListener
+     */
     @Override
     public void soundPrepareComplete(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
         this.mediaPlayer.start();
     }
 
-    /** Called when the user taps the Try button */
+    /**
+     * event handler for click of try button
+     * @param view representing try button in MainActivity
+     */
     public void tryAnotherCard(View view) {
         if (progressDialog != null) {
             progressDialog.show();
@@ -136,6 +154,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
 
     }
 
+    /**
+     * shows next card when user touches try button
+     * @param card next card to be shown
+     */
     private void showCard(Card card) {
         if (progressDialog != null) {
             progressDialog.hide();
@@ -150,7 +172,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 
-    public void showPictureCard(Card card) {
+    /**
+     * @param card next card (that is a PictureCard) to be shown
+     */
+    private void showPictureCard(Card card) {
         setContentView(R.layout.activity_main_picture_card);
         PictureCard picCard = (PictureCard) card;
 
@@ -173,7 +198,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 
-    public void showVibratorCard(Card card) {
+    /**
+     * @param card next card (that is a VibratorCard) to be shown
+     */
+    private void showVibratorCard(Card card) {
         setContentView(R.layout.activity_main_vibrator_card);
 
         VibratorCard vibCard = (VibratorCard) card;
@@ -187,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
-        }else{
+        }else {
             //deprecated in API 26
             v.vibrate(500);
         }
@@ -202,7 +230,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCompleteL
         }
     }
 
-    public void showSoundCard(Card card) {
+    /**
+     * @param card next card (that is a SoundCard) to be shown
+     */
+    private void showSoundCard(Card card) {
         SoundCard soundCard = (SoundCard) card;
         new SoundPrepare(this).execute(soundCard.soundURL);
 

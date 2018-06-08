@@ -12,6 +12,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * class for reading cards information as a string in json format
+ */
 public class DownloadCardsInfo extends AsyncTask<String, Void, String> {
     DownloadCompleteListener jsonDCL;
 
@@ -34,7 +37,12 @@ public class DownloadCardsInfo extends AsyncTask<String, Void, String> {
         jsonDCL.jsonDownloadComplete(new Utility().getCardsFromJSONString(result));
     }
 
-    // Creates and opens a connection to the resource referred to by the URL.
+    /**
+     * Creates and opens a connection to the resource referred to by the URL.
+     * @param urlString url to the resource
+     * @return  string with json format
+     * @throws IOException
+     */
     private String downloadCardsJSON(String urlString) throws IOException {
         InputStream is = null;
         try {
@@ -51,6 +59,12 @@ public class DownloadCardsInfo extends AsyncTask<String, Void, String> {
         }
     }
 
+    /**
+     * converts InputStream to String
+     * @param is InputStream object that will be converted to String
+     * @return String data in InputStream
+     * @throws IOException
+     */
     private String convertInputStreamToString(InputStream is) throws IOException {
         BufferedReader r = new BufferedReader(new InputStreamReader(is));
         StringBuilder total = new StringBuilder();

@@ -6,6 +6,10 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+/**
+ * class using to getting a sound ready to play
+ * and then pass the MediaPlayer object back to MainActivity
+ */
 public class SoundPrepare extends AsyncTask<String, Void, MediaPlayer>{
     DownloadCompleteListener downloadCompleteListener;
 

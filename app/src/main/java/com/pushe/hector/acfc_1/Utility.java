@@ -4,7 +4,17 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+/**
+ * utility class for parsing json formatted string
+ */
 public class Utility {
+
+    /**
+     * converts information in json String to Card objects
+     * @param jsonString
+     * @return Card objects generated from information in json String
+     * @see Card
+     */
     public ArrayList<Card> getCardsFromJSONString(String jsonString) {
         ArrayList<String> items = seperateItemsInJSON(jsonString);
         ArrayList<Card> cards = new ArrayList<Card>();
@@ -15,6 +25,11 @@ public class Utility {
         return cards;
     }
 
+    /**
+     * seperates items in json String
+     * @param jsonString string in json format
+     * @return ArrayList of items as String in main json String
+     */
     private ArrayList<String> seperateItemsInJSON(String jsonString) {
         ArrayList<String> items = new ArrayList<String>();
         for (int i = 1; i < jsonString.length(); i++) {
@@ -31,6 +46,12 @@ public class Utility {
         return items;
     }
 
+    /**
+     * converts one item of a json String (of several items) to a Card object
+     * @param item one item in a json String of several items
+     * @return Card object generated from item String
+     * @see Card
+     */
     private Card stringItemToCard(String item) {
         Code code = Code.UNDEFINED;
         Tag tag = Tag.UNDEFINED;

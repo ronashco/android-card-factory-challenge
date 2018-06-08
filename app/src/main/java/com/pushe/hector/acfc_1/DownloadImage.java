@@ -6,6 +6,11 @@ import android.os.AsyncTask;
 
 import java.net.URL;
 
+/**
+ * class for downloading images for PictureCard objects
+ * @see Card
+ * @see PictureCard
+ */
 public class DownloadImage extends AsyncTask<String, Void, BitmapAndURLWrap> {
     DownloadCompleteListener downloadCompleteListener;
 
@@ -32,6 +37,9 @@ public class DownloadImage extends AsyncTask<String, Void, BitmapAndURLWrap> {
     }
 }
 
+/**
+ * class for wrapping a image and it's url
+ */
 class BitmapAndURLWrap {
     Bitmap imageBitmap;
     String imageURL;

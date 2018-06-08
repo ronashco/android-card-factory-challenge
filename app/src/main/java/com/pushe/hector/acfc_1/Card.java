@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
 /**
- * Card class for abstracting cards
- * Card class has 3 subclassed: PictureCard, VibratorCard, SoundCard
+ * class for representing cards
+ * Card class has 3 subclasses: PictureCard, VibratorCard, SoundCard
  */
 public abstract class Card {
     Code code;
@@ -56,13 +56,13 @@ class SoundCard extends Card {
 enum Code {
     PICTURE_CARD,   // 0
     VIBRATOR_CARD,  // 1
-    SOUND_CARD,      // 2
+    SOUND_CARD,     // 2
     UNDEFINED
 }
 
 enum Tag {
     SPORT,  // sport
     ART,    // art
-    FUN,     // fun
+    FUN,    // fun
     UNDEFINED
 }
